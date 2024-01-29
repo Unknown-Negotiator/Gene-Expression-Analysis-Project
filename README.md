@@ -7,3 +7,5 @@
 Raw Counts |	Log2 Transformed Counts
 -|-
 ![](images/raw_counts_histplot_2.png) | ![](images/log2_counts_histplot.png)
+## Control vs Treated replicates boxplot
+![](images/log2_counts_boxplot.png)
