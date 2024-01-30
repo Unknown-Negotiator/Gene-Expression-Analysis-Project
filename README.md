@@ -20,3 +20,6 @@ Before filtration |	After filtration
 As a result of this filtration the **number of genes came down from 33602 to 24303**
 
 ## Normalization
+
+# Differential Gene Expression Analysis
+![](images/MA_plot.png)
