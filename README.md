@@ -15,3 +15,5 @@ We filter out genes that have less than 10 read counts in total
 Before filtration |	After filtration
 -|-
 ![](images/counts_pre_10-filter_cut.png) | ![](images/counts_post_10-filter.png)
+
+As a result of this filtration the **number of genes came down from 33602 to 24303**
