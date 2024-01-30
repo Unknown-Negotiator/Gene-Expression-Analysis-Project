@@ -10,10 +10,13 @@ Raw Counts |	Log2 Transformed Counts
 ## Control vs Treated replicates boxplot
 ![](images/log2_counts_boxplot.png)
 
-# Data Filtration
+# Data Preprocessing
+## Filtration
 We filter out genes that have less than 10 read counts in total
 Before filtration |	After filtration
 -|-
 ![](images/counts_pre_10-filter_cut.png) | ![](images/counts_post_10-filter.png)
 
 As a result of this filtration the **number of genes came down from 33602 to 24303**
+
+## Normalization
