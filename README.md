@@ -28,6 +28,6 @@ As a result of this filtration the **number of genes came down from 33602 to 243
 ![](images/MA_plot.png)
 
 ## DEG plots
-Before filtration |	After filtration
+Volcano plot | Control vs Treatment
 -|-
 ![](images/volcano_plot.png) | ![](images/control_vs_treatment.png)
