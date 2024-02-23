@@ -145,9 +145,87 @@ for (i in seq_along(n_values)) {
 # Print Frobenius norm values
 frobenius_norms
 
+#=======================Use Meinhausen-Bühlman version of glass=================
+# Load necessary libraries
+library(huge)
+
+# Set penalty parameter
+penalty <- 0.3
+
+# Initialize list to store estimated precision matrices
+estimated_precision_matrices <- list()
+
+# Loop through different sample sizes
+for (n in n_values) {
+  # Load simulated data
+  simulated_data <- read.csv(paste0("simulated_data_n", n, ".csv"))
+  
+  # Estimate precision matrix using glasso
+  estimated_precision_matrix <- huge.glasso(x = as.matrix(simulated_data), lambda = penalty)
+  
+  # Store estimated precision matrix in list
+  estimated_precision_matrices[[paste0("estimated_precision_matrix_n", n)]] <- estimated_precision_matrix
+}
+
+# Accessing the estimated precision matrices
+estimated_precision_matrices[["estimated_precision_matrix_n10"]] # Access precision matrix with n = 10
+estimated_precision_matrices[["estimated_precision_matrix_n100"]] # Access precision matrix with n = 100
+estimated_precision_matrices[["estimated_precision_matrix_n1000"]] # Access precision matrix with n = 1000
 
 
+# Define true network structure (example, replace with your actual true network)
+true_network <- matrix(c(
+  0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+  1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+  1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+  0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+  0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,
+  0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+  0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0,
+  0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1
+), nrow = 11, byrow = TRUE)
 
+# Initialize counts
+true_positives <- 0
+true_negatives <- 0
+false_positives <- 0
+false_negatives <- 0
+
+# Loop through different sample sizes
+for (n in n_values) {
+  # Get estimated precision matrix
+  estimated_precision_matrix <- estimated_precision_matrices[[paste0("estimated_precision_matrix_n", n)]]
+  
+  # Compare with true network structure
+  for (i in 1:nrow(true_network)) {
+    for (j in 1:ncol(true_network)) {
+      if (true_network[i, j] == 1) {
+        # True edge
+        if (estimated_precision_matrix$path[[1]][i, j] == 1) {
+          true_positives <- true_positives + 1
+        } else {
+          false_negatives <- false_negatives + 1
+        }
+      } else {
+        # True non-edge
+        if (estimated_precision_matrix$path[[1]][i, j] == 0) {
+          true_negatives <- true_negatives + 1
+        } else {
+          false_positives <- false_positives + 1
+        }
+      }
+    }
+  }
+}
+
+# Output counts
+cat("True positives:", true_positives, "\n")
+cat("True negatives:", true_negatives, "\n")
+cat("False positives:", false_positives, "\n")
+cat("False negatives:", false_negatives, "\n")
 
 
 

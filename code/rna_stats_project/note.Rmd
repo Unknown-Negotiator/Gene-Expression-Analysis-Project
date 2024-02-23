@@ -1,0 +1,46 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+##======Their Way 2
+# Load necessary libraries
+library(huge)
+
+# Set parameters
+p <- 11 # Number of genes
+n_values <- c(10, 100, 1000) # Different sample sizes
+prob <- 0.2 # Probability for random network
+epsilon <- 1e-6 # Small value for regularization
+
+# Initialize list to store simulated datasets
+simulated_datasets <- list()
+
+# Loop through different sample sizes
+for (n in n_values) {
+  # Generate random network
+  L <- huge.generator(n = n, d = p, graph = "random", prob = prob)
+  
+  # Generate covariance matrix
+  cov_matrix <- cov(L$data)
+  
+  # Regularize covariance matrix
+  cov_matrix_reg <- cov_matrix + epsilon * diag(p)
+  
+  # Generate precision matrix
+  precision_matrix <- solve(cov_matrix_reg)
+  
+  # Generate data from multivariate normal distribution with precision matrix reflecting the network structure
+  simulated_data <- MASS::mvrnorm(n = n, mu = rep(0, p), Sigma = precision_matrix)
+  
+  # Store simulated dataset in list
+  simulated_datasets[[paste0("simulated_data_n", n)]] <- simulated_data
+}
+
+# Accessing the simulated datasets
+simulated_datasets[["simulated_data_n10"]] # Access dataset with n = 10
+simulated_datasets[["simulated_data_n100"]] # Access dataset with n = 100
+simulated_datasets[["simulated_data_n1000"]] # Access dataset with n = 1000
+```
+
